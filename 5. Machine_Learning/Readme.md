@@ -1,51 +1,59 @@
+# 🚀 Machine Learning Mastery
 
-# Machine Learning Mastery - Complete Learning Repository
+### Complete End-to-End Machine Learning Repository
 
-> A comprehensive, end-to-end Machine Learning repository covering theory, implementation, evaluation, forecasting, reinforcement learning, and production deployment.
+> A production-focused, industry-ready Machine Learning repository covering theory, implementation, model selection, optimization, reinforcement learning, forecasting, deployment, and MLOps.
+
+---
 
 [![License](https://img.shields.io/badge/license-MIT-green.svg)]()
 [![Python](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/)
+[![ML](https://img.shields.io/badge/Machine-Learning-Complete-orange.svg)]()
 [![Last Updated](https://img.shields.io/badge/last%20updated-2026-brightgreen.svg)]()
 
 ---
 
-## 📚 Overview
+# 📚 Overview
 
-This repository provides a **complete Machine Learning roadmap**, from data preprocessing to deploying production-ready ML systems.
+**Machine Learning Mastery** is a structured, real-world focused repository designed to take you from fundamentals to production-ready ML systems.
 
-It includes:
+It covers:
 
-* Core Machine Learning concepts
+* Core ML Theory
 * Supervised & Unsupervised Learning
+* Model Selection & Hyperparameter Optimization
 * Reinforcement Learning
-* Semi-Supervised Learning
-* Forecasting Models
-* Model Deployment & MLOps
+* Semi-Supervised & Modern Learning Paradigms
+* Time Series Forecasting
+* Model Deployment
+* MLOps & Production Practices
 
-Designed for:
-
-* Students
-* ML Engineers
-* Data Scientists
-* AI Enthusiasts
+This repository is structured as a complete ML learning ecosystem.
 
 ---
 
-# 📌 Machine Learning Types Covered
+# 🎯 Who This Repository Is For
 
-### 🔹 Core Types
+* ✔ Students learning Machine Learning
+* ✔ ML Engineers building portfolios
+* ✔ Data Scientists strengthening fundamentals
+* ✔ AI Developers preparing for interviews
+* ✔ Professionals moving toward production ML
 
-* **Supervised Learning**
-* **Unsupervised Learning**
-* **Reinforcement Learning**
+---
 
-### 🔹 Advanced & Modern Extensions
+# 🗺 Complete Learning Roadmap
 
-* Self-Supervised Learning
-* Semi-Supervised Learning
-* Few-Shot Learning
-* Forecasting Models
-* MLOps & Deployment
+| Phase | Focus Area             | What You Master                              |
+| ----- | ---------------------- | -------------------------------------------- |
+| 1     | ML Pipeline            | Data preprocessing, feature engineering      |
+| 2     | Model Selection        | Bias-variance, cross-validation, tuning      |
+| 3     | Supervised Learning    | Regression, classification, ensembles        |
+| 4     | Unsupervised Learning  | Clustering, dimensionality reduction         |
+| 5     | Reinforcement Learning | Model-based & model-free methods             |
+| 6     | Forecasting            | ARIMA, SARIMA, smoothing methods             |
+| 7     | Deployment             | APIs, dashboards, production integration     |
+| 8     | MLOps                  | Monitoring, versioning, lifecycle management |
 
 ---
 
@@ -61,7 +69,8 @@ machine-learning-mastery/
 ├── 01_ml_pipeline/
 │   ├── 01_data_preprocessing/
 │   ├── 02_exploratory_data_analysis/
-│   └── 03_model_evaluation/
+|   ├── 03_model_selection/
+│   └── 04_model_evaluation/
 │
 ├── 02_supervised_learning/
 │   ├── 01_linear_regression/
@@ -115,28 +124,50 @@ machine-learning-mastery/
 
 ## Module 1: Machine Learning Pipeline
 
-### 1️⃣ Data Preprocessing
+### 1️. Data Preprocessing
 
-* Data Cleaning
-* Feature Scaling
-* Feature Engineering
-* Feature Extraction
-* Feature Selection Techniques
+* Data cleaning
+* Handling missing values
+* Encoding categorical variables
+* Feature scaling
+* Feature engineering
+* Feature extraction
+* Feature selection
 
-### 2️⃣ Exploratory Data Analysis
+### 2️. Exploratory Data Analysis
 
-* EDA Concepts
-* Advanced EDA
-* Time Series Visualization
+* Statistical analysis
+* Data visualization
+* Correlation analysis
+* Time series visualization
 
-### 3️⃣ Model Evaluation
+### 3️. Model Selection 
+
+Model selection ensures the right algorithm is chosen for the right problem.
+
+Covered concepts:
+
+* Bias vs Variance Tradeoff
+* Overfitting & Underfitting
+* Train-Test Split
+* K-Fold Cross Validation
+* Stratified K-Fold
+* Grid Search
+* Random Search
+* Hyperparameter Optimization
+* Model comparison frameworks
+* Regularization techniques
+* Performance benchmarking
+
+###  4. Model Evaluation
 
 * Confusion Matrix
-* Precision, Recall, F1-Score
+* Accuracy, Precision, Recall
+* F1 Score
 * AUC-ROC
-* Cross Validation
-* Hyperparameter Tuning
-* Regularization
+* Regression metrics (MAE, MSE, RMSE, R²)
+* Cross-validation scoring
+* Model diagnostics
 
 ---
 
@@ -299,14 +330,14 @@ pip install -r requirements.txt
 
 By completing this repository, you will be able to:
 
-✅ Build end-to-end ML pipelines
-✅ Implement ML algorithms from scratch
-✅ Evaluate and optimize models
-✅ Apply unsupervised learning techniques
-✅ Build reinforcement learning agents
-✅ Work with time series forecasting models
-✅ Deploy ML models as APIs
-✅ Apply MLOps principles in production
+* ✅ Build end-to-end ML pipelines
+* ✅ Implement ML algorithms from scratch
+* ✅ Evaluate and optimize models
+* ✅ Apply unsupervised learning techniques
+* ✅ Build reinforcement learning agents
+* ✅ Work with time series forecasting models
+* ✅ Deploy ML models as APIs
+* ✅ Apply MLOps principles in production
 
 ---
 
@@ -360,5 +391,4 @@ Contributions are welcome!
 Give this repository a ⭐ and share it with others!
 
 
-Just tell me your audience.
 
