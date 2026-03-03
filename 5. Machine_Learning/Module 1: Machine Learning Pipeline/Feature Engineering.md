@@ -30,6 +30,9 @@ Then someone tells you:
 
 > “The problem isn’t the model… it’s your features.”
 
+
+![feature-engineering](https://github.com/user-attachments/assets/6ef1a6aa-7f48-4d64-8bbd-484c5b2f74c8)
+
 Welcome to the world of:
 
 # 🔥 Feature Engineering
@@ -55,6 +58,8 @@ Raw data is messy.
 Models don’t understand “messy”.
 
 Feature engineering prepares data in a way machines can understand.
+
+
 
 ---
 
