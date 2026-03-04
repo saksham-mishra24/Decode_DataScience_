@@ -1,32 +1,48 @@
 # 🎬 Bias vs Variance  
-## 🤖 The Day Milo Discovered Why His Model Was Failing
+## 🌟 Meet the New Characters
+
+👩‍🎓 **Naina** – Psychology student. Never coded before.  
+👨‍🏫 **Professor Dev** – Calm, loves drawing on whiteboards.  
+🤖 **Pixel** – The machine learning model. Sometimes lazy. Sometimes dramatic.
 
 ---
 
-## 🌌 Chapter 1: The Confusing Results
+# 🌌 Chapter 1: Two Strange Failures
 
-Milo built a model.
+Naina trained Pixel.
 
-On training data?
+### Model 1 Results:
+Training Accuracy: 65%  
+Test Accuracy: 63%
 
-🔥 98% accuracy.
+Professor Dev said:
+> “This model is too lazy.”
 
-On test data?
+---
 
-💀 61% accuracy.
+She trained another model.
 
-Milo panicked.
+### Model 2 Results:
+Training Accuracy: 100%  
+Test Accuracy: 58%
 
-> 🤖 “It was perfect yesterday! What happened?!”
+Professor Dev said:
+> “This one memorized everything.”
 
-Professor Arjun drew two words on the board:
+Naina was confused.
+
+> “How can one be too weak… and the other too smart?”
+
+Professor Dev turned to the board and wrote:
 
 # ⚖ BIAS & VARIANCE
 
 > 👨‍🏫 “Every machine learning model struggles with these two forces.”
 
-And thus began the most important lesson of Milo’s journey.
+- **Bias** → Being too simple  
+- **Variance** → Being too sensitive  
 
+Balance them = Good model.
 ---
 
 # 🧠 First: What Is Bias? (Super Simple)
@@ -43,12 +59,15 @@ It ignores complexity.
 
 ## 🎯 Real-Life Analogy (Bias)
 
-Imagine trying to draw a circle using only a straight line.
+Imagine a doctor who says:
 
-Impossible.
+> “Every headache is because of dehydration.”
 
-No matter how much you try,  
-the line can never become a circle.
+That’s bias.
+
+Too simple.
+Ignores other possibilities.
+
 
 That is **High Bias**.
 
@@ -80,7 +99,12 @@ flowchart LR
 
 Variance means:
 
+> Model reacts too much to small changes in data.
 > The model is too sensitive to training data.
+
+If you change one data point…
+
+Model changes drastically.
 
 It memorizes instead of learning.
 
@@ -116,6 +140,14 @@ flowchart LR
     A[Complex Model 🤯] --> B[Memorizes Training Data]
     B --> C[Very Low Training Error]
     C --> D[High Test Error]
+```
+```mermaid
+flowchart TD
+    A[Train Model 🤖] --> B{Too Simple?}
+    B -->|Yes| C[High Bias → Underfitting ❌]
+    B -->|No| D{Too Complex?}
+    D -->|Yes| E[High Variance → Overfitting ❌]
+    D -->|No| F[Balanced Model ✅]
 ```
 
 ---
@@ -157,9 +189,28 @@ flowchart TD
 
 ---
 
+# 📊 How Model Complexity Affects Them
+
+```mermaid
+flowchart LR
+    A[Increase Model Complexity 📈] --> B[Bias Decreases]
+    A --> C[Variance Increases]
+```
+
+Simple model:
+- High Bias
+- Low Variance
+
+Complex model:
+- Low Bias
+- High Variance
+
+---
+
+
 # 🔥 Underfitting vs Overfitting
 
-Now Milo finally understood:
+Now he finally understood:
 
 ```mermaid
 flowchart LR
