@@ -8,7 +8,7 @@
 
 ---
 
-## 📚 Course Overview.
+## 📚 Course Overview
 
 This is a **12-month intensive AI course** spanning **1600 hours** of comprehensive training, designed to make you industry-ready in the field of Artificial Intelligence and Machine Learning.
 
