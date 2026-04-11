@@ -1,102 +1,405 @@
-# ML Learning & Portfolio 🎓
+# 🎓 ML Learning & Portfolio Repository
 
-A comprehensive machine learning project combining learning materials, production-ready code, and portfolio showcase projects.
+> A comprehensive, beautifully structured machine learning learning platform combining educational content, production-ready code, and a professional portfolio showcase.
 
-## 📖 Quick Navigation
+[![Python 3.8+](https://img.shields.io/badge/Python-3.8%2B-blue)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+[![Contributions Welcome](https://img.shields.io/badge/Contributions-Welcome-brightgreen.svg)](./docs/CONTRIBUTING.md)
 
-| Section | Purpose | Contents |
-|---------|---------|----------|
-| **[notebooks/](./notebooks/)** | Learning path | 4 topics with 20+ Jupyter notebooks |
-| **[src/](./src/)** | Production code | Reusable Python modules |
-| **[portfolio/](./portfolio/)** | Showcase projects | Client-ready projects for employers |
-| **[data/](./data/)** & **[datasets/](./datasets/)** | Data | Raw, processed, and external data |
+## 📚 Table of Contents
+
+- [Quick Start](#-quick-start)
+- [Repository Structure](#-repository-structure)  
+- [Learning Modules](#-learning-modules)
+- [Portfolio Projects](#-portfolio-projects)
+- [Documentation](#-documentation)
+- [Getting Help](#-getting-help)
+- [Contributing](#-contributing)
 
 ---
 
-## 🎯 Project Topics
+## 🚀 Quick Start
 
-### 1. Logistic Regression
-Learn the fundamentals of binary classification from linear regression to logistic regression.
+### 1. Clone & Setup
+```bash
+git clone https://github.com/saksham-mishra24/Decode_DataScience_.git
+cd Decode_DataScience_
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+### 2. Start Learning
+```bash
+jupyter notebook
+```
+Open `notebooks/01_logistic_regression/01_linear_to_logistic.ipynb` to begin.
+
+### 3. Follow the Path
+Start with the [Learning Path Guide](./docs/LEARNING_PATH.md) for recommended progression.
+
+---
+
+## 📁 Repository Structure
+
+```
+Decode_DataScience_/
+├── 📖 docs/                    # 📚 Complete documentation
+│   ├── LEARNING_PATH.md       # Recommended study sequence
+│   ├── SETUP.md               # Installation guide
+│   ├── PROJECT_STRUCTURE.md   # Directory breakdown
+│   ├── CONTRIBUTING.md        # How to contribute
+│   └── TROUBLESHOOTING.md     # Common issues & solutions
+│
+├── 📓 notebooks/              # 🎓 Learning modules (50+ hours)
+│   ├── 00_tests/              # Environment verification
+│   ├── 01_logistic_regression/     # Classification fundamentals (8-10 hrs)
+│   ├── 02_decision_tree/           # Tree-based methods (6-8 hrs)
+│   ├── 03_support_vector_machines/ # Margin-based classifiers (4-6 hrs)
+│   └── 04_deep_learning/           # Neural networks (30+ hrs)
+│       ├── 01_ann/            # Artificial Neural Networks
+│       ├── 02_cnn/            # Convolutional Networks
+│       └── 03_rnn/            # Recurrent Networks
+│
+├── 💻 src/                    # 🔧 Production code
+│   ├── models/                # Model implementations
+│   ├── preprocessing/         # Data utilities
+│   ├── training/              # Training utilities
+│   ├── evaluation/            # Metrics & evaluation
+│   └── utils/                 # Helper functions
+│
+├── 💼 portfolio/              # 🎯 Professional projects
+│   ├── projects/              # Real-world applications
+│   │   ├── 01_customer_churn/
+│   │   ├── 02_image_classification/
+│   │   └── 03_time_series_prediction/
+│   ├── assets/                # Models & visualizations
+│   └── cv/                    # Curriculum vitae project
+│
+├── 📊 datasets/               # 📈 Training data
+│   ├── churn_data/            # Customer data
+│   ├── mnist/                 # Handwritten digits
+│   └── pet_images/            # Image classification
+│
+├── 📁 data/                   # 🔄 Data pipeline
+│   ├── raw/                   # Original data
+│   ├── processed/             # Cleaned data
+│   └── external/              # External sources
+│
+├── 📤 output/                 # 💾 Results & models
+│   ├── models/                # Saved models
+│   ├── logs/                  # Training logs
+│   ├── plots/                 # Visualizations
+│   └── results/              # Analysis results
+│
+├── 🧪 tests/                  # ✅ Test suite
+├── 📚 resources/              # 🔗 Learning materials
+├── 🔧 scripts/                # 🛠️ Utility scripts
+└── 📋 ROOT FILES
+    ├── README.md              # This file
+    ├── requirements.txt       # Python dependencies
+    ├── setup.py              # Package configuration
+    ├── config.py             # Settings
+    └── LICENSE               # MIT License
+```
+
+See [PROJECT_STRUCTURE.md](./docs/PROJECT_STRUCTURE.md) for detailed breakdown.
+
+---
+
+## 🎯 Learning Modules
+
+Master machine learning with 4 progressive modules:
+
+### 1️⃣ Logistic Regression (8-10 hours)
+**Foundation of Classification**
+- Linear to logistic transformation
 - Decision boundaries
-- Loss functions (cross-entropy)
-- Gradient descent optimization
-- Regularization (L1/L2)
-- **[Start here →](./notebooks/01_logistic_regression/)**
+- Cross-entropy loss
+- Gradient descent from scratch
+- Regularization techniques
+- **[Start Here →](./notebooks/01_logistic_regression/README.md)**
 
-### 2. Decision Trees
-Master tree-based classification algorithms.
-- Information gain & entropy
-- Gini impurity
-- Tree construction
+### 2️⃣ Decision Trees (6-8 hours)
+**Tree-Based Learning**
+- Information theory (entropy)
+- Gini impurity calculations
+- Tree construction algorithms
 - Hyperparameter tuning
-- **[Start here →](./notebooks/02_decision_tree/)**
+- Overfitting prevention
+- **[Start Here →](./notebooks/02_decision_tree/README.md)**
 
-### 3. Support Vector Machines
-Understanding margin-based classifiers.
-- SVM theory
+### 3️⃣ Support Vector Machines (4-6 hours)
+**Margin-Based Classification**
+- Maximum margin principle
 - Kernel methods
-- Multiclass classification
-- **[Start here →](./notebooks/03_support_vector_machines/)**
+- Soft margin SVM
+- Multi-class techniques
+- **[Start Here →](./notebooks/03_support_vector_machines/README.md)**
 
-### 4. Deep Learning
-Neural networks from basics to advanced architectures.
+### 4️⃣ Deep Learning (30+ hours)
 
-#### 4.1 Artificial Neural Networks (ANN)
-- Network architecture
+#### 🧠 Artificial Neural Networks (10-12 hours)
+- Network architecture & neurons
 - Forward & backward propagation
 - Activation functions
-- **[Start here →](./notebooks/04_deep_learning/01_ann/)**
+- MNIST digit classification
+- **[Start Here →](./notebooks/04_deep_learning/01_ann/README.md)**
 
-#### 4.2 Convolutional Neural Networks (CNN)
+#### 🖼️ Convolutional Neural Networks (12-15 hours)
 - Convolution operations
-- Pooling strategies
-- Padding techniques
+- Pooling & padding
+- CNN architectures
 - Transfer learning
 - Image classification projects
-- **[Start here →](./notebooks/04_deep_learning/02_cnn/)**
+- **[Start Here →](./notebooks/04_deep_learning/02_cnn/README.md)**
 
-#### 4.3 Recurrent Neural Networks (RNN)
+#### 🔄 Recurrent Neural Networks (10-12 hours)
 - RNN fundamentals
+- LSTM & GRU cells
 - Sequence processing
-- Text encoding
 - Time series prediction
-- **[Start here →](./notebooks/04_deep_learning/03_rnn/)**
+- **[Start Here →](./notebooks/04_deep_learning/03_rnn/README.md)**
+
+**Total Learning Time: 50-60+ hours**
 
 ---
 
 ## 💼 Portfolio Projects
 
-Polished, production-ready demonstrations of ML skills.
+Production-ready AI applications showcasing real-world ML skills:
 
-### Project 1: Customer Churn Prediction
-**Problem**: Predict which customers will churn
-- **Model**: Artificial Neural Network
-- **Challenge**: Handling class imbalance
-- **Metrics**: Precision, Recall, F1-Score
-- **[View Project →](./portfolio/projects/01_customer_churn/)**
+### Project 1: Customer Churn Prediction 📊
+**Challenge**: Predict customer attrition
+- **Data**: 10,000 customer records
+- **Target**: Binary churn classification
+- **Model**: ANN with class balancing
+- **Metrics**: Accuracy, Precision, Recall, F1, ROC-AUC
+- **[View →](./portfolio/projects/01_customer_churn/)**
 
-### Project 2: Image Classification
-**Problem**: Classify pet images (cats vs. dogs)
-- **Model**: CNN with Transfer Learning
-- **Dataset**: 10,000+ labeled images
+### Project 2: Image Classification 🖼️
+**Challenge**: Cat vs Dog classification
+- **Data**: 5,000+ labeled images
+- **Model**: CNN with transfer learning (ResNet/VGG)
 - **Techniques**: Data augmentation, fine-tuning
-- **[View Project →](./portfolio/projects/02_image_classification/)**
+- **Metrics**: Accuracy, confusion matrix, ROC curves
+- **[View →](./portfolio/projects/02_image_classification/)**
 
-### Project 3: Time Series Prediction
-**Problem**: Forecast future values
-- **Model**: LSTM RNN
+### Project 3: Time Series Prediction 📈
+**Challenge**: Forecast future trends
+- **Data**: Historical time series
+- **Model**: LSTM recurrent network
 - **Techniques**: Sequence-to-sequence learning
-- **[View Project →](./portfolio/projects/03_time_series_prediction/)**
+- **Metrics**: MAE, RMSE, R²
+- **[View →](./portfolio/projects/03_time_series_prediction/)**
+
+---
+
+## 📖 Documentation
+
+Complete guides for every aspect:
+
+| Document | Purpose |
+|----------|---------|
+| [LEARNING_PATH.md](./docs/LEARNING_PATH.md) | **Start here!** Recommended study sequence |
+| [SETUP.md](./docs/SETUP.md) | Environment setup & installation |
+| [PROJECT_STRUCTURE.md](./docs/PROJECT_STRUCTURE.md) | Directory organization explained |
+| [TROUBLESHOOTING.md](./docs/TROUBLESHOOTING.md) | Common issues & solutions |
+| [CONTRIBUTING.md](./docs/CONTRIBUTING.md) | How to contribute |
 
 ---
 
 ## 🛠️ Installation & Setup
 
-### Prerequisites
-- Python 3.8+
-- pip or conda
+### Requirements
+- **Python** 3.8 or higher
+- **pip** or conda package manager
+- **Git** for cloning repository
+- **GPU** (optional for faster deep learning training)
 
-### Quick Start
+### Step-by-Step Setup
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/saksham-mishra24/Decode_DataScience_.git
+cd Decode_DataScience_
+
+# 2. Create virtual environment
+python -m venv venv
+
+# 3. Activate virtual environment
+# On Windows:
+venv\Scripts\activate
+# On macOS/Linux:
+source venv/bin/activate
+
+# 4. Install dependencies
+pip install --upgrade pip
+pip install -r requirements.txt
+
+# 5. Verify installation
+python -c "import tensorflow, torch, sklearn; print('✓ All libraries installed!')"
+
+# 6. Start Jupyter
+jupyter notebook
+```
+
+**Detailed setup guide**: See [SETUP.md](./docs/SETUP.md)
+
+---
+
+## 📚 Key Technologies
+
+| Category | Tools |
+|----------|-------|
+| **Data Science** | NumPy, Pandas, Scikit-learn |
+| **Visualization** | Matplotlib, Seaborn |
+| **Deep Learning** | TensorFlow, Keras, PyTorch |
+| **Computer Vision** | OpenCV, PIL |
+| **NLP** | NLTK, SpaCy |
+
+---
+
+## 🎓 Course Outline
+
+### Phase 1: Fundamentals (Weeks 1-3)
+- Logistic Regression
+- Decision Boundaries
+- Optimization Fundamentals
+
+### Phase 2: Classical ML (Weeks 3-7)
+- Decision Trees
+- Support Vector Machines
+- Model Comparison
+
+### Phase 3: Deep Learning (Weeks 7-12)
+- Neural Networks
+- CNNs for Computer Vision
+- RNNs for Sequences
+
+### Phase 4: Application (Weeks 12+)
+- Portfolio Projects
+- Deployment
+- Production ML
+
+---
+
+## ✅ Quick Start Checklist
+
+- [ ] Clone repository
+- [ ] Set up Python virtual environment
+- [ ] Install requirements
+- [ ] Run test notebook
+- [ ] Read [Learning Path](./docs/LEARNING_PATH.md)
+- [ ] Open first notebook
+- [ ] Begin learning! 🚀
+
+---
+
+## 💡 Learning Tips
+
+✅ **Best Practices:**
+- Code along with notebooks (don't just read)
+- Experiment by modifying code
+- Take notes in markdown cells
+- Complete practice problems
+- Review previous concepts regularly
+- Build your own projects
+
+❌ **Avoid:**
+- Rushing through concepts
+- Skipping theory for code
+- Using someone else's code without understanding
+- Ignoring errors and warnings
+- Training huge models without GPU
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions! See [CONTRIBUTING.md](./docs/CONTRIBUTING.md) for:
+- How to add notebooks
+- Code style guidelines
+- Pull request process
+- Recognition for contributors
+
+---
+
+## ❓ Getting Help
+
+### Resources
+- **Documentation**: Check [docs/](./docs/) folder
+- **Troubleshooting**: See [TROUBLESHOOTING.md](./docs/TROUBLESHOOTING.md)
+- **GitHub Issues**: Report bugs or ask questions
+- **Discussions**: Join community discussions
+
+### Common Questions
+- **Setup issues?** → See [SETUP.md](./docs/SETUP.md)
+- **Learning path?** → See [LEARNING_PATH.md](./docs/LEARNING_PATH.md)
+- **Structure?** → See [PROJECT_STRUCTURE.md](./docs/PROJECT_STRUCTURE.md)
+- **Errors?** → See [TROUBLESHOOTING.md](./docs/TROUBLESHOOTING.md)
+
+---
+
+## 📊 Repository Statistics
+
+- 📓 **20+ Jupyter Notebooks**
+- 📖 **1,000+ Pages of Educational Content**
+- 💻 **500+ Lines of Production Code**
+- 📈 **3 Complete Portfolio Projects**
+- ⏱️ **50-60+ Hours of Learning Material**
+- 📚 **Comprehensive Documentation**
+
+---
+
+## 📜 License
+
+This project is licensed under the **MIT License** - see [LICENSE](./LICENSE) file for details.
+
+---
+
+## 🙏 Acknowledgments
+
+- Directorate General of Training (DGT)
+- Microsoft for partnership
+- Open-source community
+- All learners and contributors
+
+---
+
+## 🌟 Quick Navigation
+
+**First Time?** → Start with [Quick Start](#-quick-start) section
+
+**Want to Learn?** → Check [Learning Modules](#-learning-modules)
+
+**Need Help?** → See [Getting Help](#-getting-help)
+
+**Want to Contribute?** → Read [CONTRIBUTING.md](./docs/CONTRIBUTING.md)
+
+---
+
+## 📞 Contact & Links
+
+- **GitHub**: [@saksham-mishra24](https://github.com/saksham-mishra24)
+- **Repository**: [Decode_DataScience_](https://github.com/saksham-mishra24/Decode_DataScience_)
+- **Issues**: [Report bugs or suggest features](https://github.com/saksham-mishra24/Decode_DataScience_/issues)
+
+---
+
+<div align="center">
+
+**🚀 Ready to Master Machine Learning?**
+
+[Start Learning Now →](./docs/LEARNING_PATH.md)
+
+---
+
+Made with ❤️ for AI & Machine Learning Enthusiasts
+
+**Last Updated**: April 2026
+
+</div>
 
 ```bash
 # 1. Clone or navigate to project
