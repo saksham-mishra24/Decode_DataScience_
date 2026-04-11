@@ -1,0 +1,128 @@
+# .gitignore for ML Learning & Portfolio Project
+
+# ============================================
+# PYTHON
+# ============================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# ============================================
+# JUPYTER NOTEBOOKS
+# ============================================
+.ipynb_checkpoints/
+*.ipynb~
+.jupyterlab-settings
+
+# ============================================
+# IDE & EDITORS
+# ============================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ============================================
+# LARGE DATA & DATASETS
+# ============================================
+# Image datasets (too large for version control)
+datasets/pet_images/train/
+datasets/pet_images/test/
+datasets/mnist/
+
+# Raw data files
+data/raw/*.csv
+data/raw/*.xlsx
+data/raw/*.json
+data/raw/*.parquet
+
+# Processed data
+data/processed/*.csv
+data/processed/*.parquet
+
+# ============================================
+# MODEL FILES & OUTPUTS
+# ============================================
+output/models/*.h5
+output/models/*.pkl
+output/models/*.joblib
+output/models/*.pth
+output/plots/
+output/logs/
+output/results/
+*.model
+
+# ============================================
+# VIRTUAL ENVIRONMENT
+# ============================================
+venv/
+env/
+ENV/
+.venv
+.env
+
+# ============================================
+# SYSTEM FILES
+# ============================================
+.DS_Store
+.AppleDouble
+.LSOverride
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+desktop.ini
+
+# ============================================
+# TEMPORARY FILES
+# ============================================
+*.tmp
+*.temp
+*.bak
+*.log
+*.swp
+*.lock
+
+# ============================================
+# PIP CACHE
+# ============================================
+pip-log.txt
+pip-delete-this-directory.txt
+
+# ============================================
+# GIT-LFS (for large files)
+# ============================================
+# Uncomment if using git-lfs for large files
+# *.h5
+# *.pkl
+# *.joblib
+
+# ============================================
+# EXCEPTIONS (force to include)
+# ============================================
+# If you want to include specific large files, add them below:
+# !datasets/pet_images/.gitkeep
+# !data/raw/.gitkeep
+# !output/models/.gitkeep
