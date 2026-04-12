@@ -1,0 +1,300 @@
+
+
+# 🎭 Scene — “Ab thoda aur deep jaate hain (Step by Step)”
+
+---
+- ❌ Agar yaha jaldi ki, to aage TF-IDF aur embeddings totally confuse kar denge
+---
+**Riya:**
+Theek hai Aman… ab next step 😏
+
+👉 Ab hum compare karenge:
+**Unigram vs Bigram vs Trigram**
+
+---
+
+# 🧠 Step 1 — Same sentence use karte hain
+
+---
+
+```text
+"I love AI"
+```
+
+---
+
+---
+
+# 🔹 1. Unigram (N = 1)
+
+---
+
+👉 ek-ek word alag
+
+```text
+[I, love, AI]
+```
+
+---
+
+**Aman:**
+Ye to BoW jaisa hi hai 😐
+
+---
+
+**Riya:**
+Exactly 💯
+👉 Unigram = BoW level
+
+---
+
+---
+
+# 🔹 2. Bigram (N = 2)
+
+---
+
+👉 2 words ek saath
+
+```text
+[I love, love AI]
+```
+
+---
+
+👉 order thoda capture ho gaya
+
+---
+
+---
+
+# 🔹 3. Trigram (N = 3)
+
+---
+
+👉 3 words ek saath
+
+```text
+[I love AI]
+```
+
+---
+
+👉 pura sentence ek group ban gaya
+
+---
+
+---
+
+# ⚖️ Step 2 — Comparison
+
+---
+
+| Type    | Output          | Order       |
+| ------- | --------------- | ----------- |
+| Unigram | I, love, AI     | ❌           |
+| Bigram  | I love, love AI | ✅ (partial) |
+| Trigram | I love AI       | ✅ (strong)  |
+
+---
+
+---
+
+# 🎯 Step 3 — Real Insight (IMPORTANT)
+
+---
+
+**Riya (serious):**
+
+```text
+Jaise-jaise N badhta hai:
+→ order zyada capture hota hai
+→ lekin problem bhi badhti hai
+```
+
+---
+
+---
+
+# 💥 Step 4 — Hidden Problem (Very Important)
+
+---
+
+**Aman:**
+Problem? 😳
+
+---
+
+**Riya:**
+Haan… sabse dangerous part 👇
+
+---
+
+---
+
+## ❌ Problem 1 — Explosion
+
+---
+
+Sentence:
+
+```text
+"I love AI and machine learning"
+```
+
+---
+
+### Unigram:
+
+👉 few words
+
+---
+
+### Bigram:
+
+👉 zyada combinations
+
+---
+
+### Trigram:
+
+👉 aur zyada
+
+---
+
+---
+
+```text
+Words ↑ → combinations ↑↑ → memory problem 💥
+```
+
+---
+
+---
+
+## ❌ Problem 2 — Data sparse ho jata hai
+
+---
+
+👉 bahut saare vectors me mostly **0 hi 0**
+
+---
+
+---
+
+## ❌ Problem 3 — Still Meaning Missing
+
+---
+
+```text
+"good" ≠ "great"
+```
+
+---
+
+👉 even trigram bhi meaning nahi samajhta
+
+---
+
+---
+
+# 🧠 Step 5 — Real Intuition
+
+---
+
+```text
+Unigram → kya words hain  
+Bigram → kaun kiske saath aata hai  
+Trigram → small phrases samajhta hai  
+```
+
+---
+
+---
+
+# 🎬 Scene — Final clarity
+
+---
+
+**Aman:**
+Toh best kya hai? unigram, bigram ya trigram? 😐
+
+---
+
+**Riya:**
+Sach sunega? 😏
+
+---
+
+```text
+Koi bhi perfect nahi hai
+```
+
+---
+
+👉 use-case pe depend karta hai
+
+---
+
+---
+
+# ⚖️ Practical Use
+
+---
+
+## ✅ Unigram
+
+* simple models
+* fast
+
+---
+
+## ✅ Bigram
+
+* basic order
+* better than unigram
+
+---
+
+## ✅ Trigram
+
+* small phrase understanding
+* but heavy
+
+---
+
+---
+
+# 🧾 Final Takeaways
+
+---
+
+```text
+• N-gram = grouping of words
+• N badhne se order improve hota hai
+• but complexity explode hoti hai
+• meaning still missing hai
+```
+
+---
+
+---
+
+# 🎬 Ending
+
+---
+
+**Aman:**
+Ab samajh aaya… improvement ho raha hai but perfect nahi 😳
+
+---
+
+**Riya (smiles):**
+Exactly 😏
+👉 NLP me har step ek compromise hota hai
+
+---
+
+---
+
+
