@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NLP Lesson: Text Representation & Feature Extraction</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2330;
+    --border: #30363d;
+    --accent: #f78166;
+    --accent2: #79c0ff;
+    --accent3: #56d364;
+    --accent4: #d2a8ff;
+    --accent5: #ffa657;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --code-bg: #0d1117;
+    --tag-bg: #1f2d3d;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Sora', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  /* HEADER */
+  header {
+    background: linear-gradient(135deg, #1a0a2e 0%, #0d1117 40%, #0a1628 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 60px 24px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 30% 50%, rgba(121,192,255,0.07) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 20%, rgba(247,129,102,0.07) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .course-tag {
+    display: inline-block;
+    background: var(--tag-bg);
+    border: 1px solid var(--accent2);
+    color: var(--accent2);
+    border-radius: 20px;
+    padding: 4px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  header h1 {
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    font-weight: 800;
+    line-height: 1.2;
+    background: linear-gradient(135deg, #f78166, #ffa657, #79c0ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 14px;
+  }
+  header p.subtitle {
+    color: var(--muted);
+    max-width: 600px;
+    margin: 0 auto 28px;
+    font-size: 15px;
+  }
+  .meta-pills {
+    display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;
+  }
+  .meta-pill {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 12px;
+    color: var(--muted);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .meta-pill span { color: var(--text); }
+
+  /* LAYOUT */
+  .layout { display: flex; max-width: 1200px; margin: 0 auto; }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 260px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 32px 16px;
+    border-right: 1px solid var(--border);
+    background: var(--surface);
+  }
+  .sidebar h3 {
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+    padding-left: 8px;
+  }
+  .sidebar a {
+    display: block;
+    padding: 8px 12px;
+    border-radius: 8px;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 13px;
+    margin-bottom: 2px;
+    transition: all 0.2s;
+    border-left: 2px solid transparent;
+  }
+  .sidebar a:hover, .sidebar a.active {
+    background: var(--surface2);
+    color: var(--text);
+    border-left-color: var(--accent);
+  }
+  .sidebar .chapter-num {
+    display: inline-block;
+    width: 20px; height: 20px;
+    background: var(--tag-bg);
+    border-radius: 50%;
+    font-size: 10px;
+    text-align: center; line-height: 20px;
+    margin-right: 8px;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  /* MAIN CONTENT */
+  main { flex: 1; padding: 40px 32px; max-width: 860px; }
+
+  /* CHAPTER */
+  .chapter {
+    margin-bottom: 64px;
+    animation: fadeUp 0.4s ease both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .chapter-header {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 28px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--border);
+  }
+  .ch-badge {
+    width: 42px; height: 42px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 16px;
+    flex-shrink: 0;
+  }
+  .ch-badge.orange { background: rgba(247,129,102,0.15); color: var(--accent); border: 1px solid rgba(247,129,102,0.3); }
+  .ch-badge.blue   { background: rgba(121,192,255,0.12); color: var(--accent2); border: 1px solid rgba(121,192,255,0.25); }
+  .ch-badge.green  { background: rgba(86,211,100,0.12); color: var(--accent3); border: 1px solid rgba(86,211,100,0.25); }
+  .ch-badge.purple { background: rgba(210,168,255,0.12); color: var(--accent4); border: 1px solid rgba(210,168,255,0.25); }
+  .ch-badge.yellow { background: rgba(255,166,87,0.12); color: var(--accent5); border: 1px solid rgba(255,166,87,0.25); }
+  .ch-badge.pink   { background: rgba(255,121,198,0.12); color: #ff79c6; border: 1px solid rgba(255,121,198,0.25); }
+  .chapter-title-block h2 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .chapter-title-block .goal-pill {
+    font-size: 12px; color: var(--muted); margin-top: 3px;
+  }
+
+  /* SECTION BLOCKS */
+  .section { margin-bottom: 24px; }
+  .section-label {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+  }
+  .sl-concept { background: rgba(121,192,255,0.1); color: var(--accent2); }
+  .sl-intuition { background: rgba(210,168,255,0.1); color: var(--accent4); }
+  .sl-visual { background: rgba(86,211,100,0.1); color: var(--accent3); }
+  .sl-practice { background: rgba(255,166,87,0.1); color: var(--accent5); }
+  .sl-mistake { background: rgba(247,129,102,0.1); color: var(--accent); }
+  .sl-question { background: rgba(255,121,198,0.1); color: #ff79c6; }
+  .sl-check { background: rgba(121,192,255,0.1); color: var(--accent2); }
+  .sl-reallife { background: rgba(86,211,100,0.1); color: var(--accent3); }
+  .sl-code { background: rgba(30,30,50,0.8); color: #79c0ff; border: 1px solid var(--border); }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 14px;
+  }
+  .card p, .card li { color: #c9d1d9; line-height: 1.75; }
+  .card ul, .card ol { padding-left: 20px; }
+  .card li { margin-bottom: 6px; }
+  .card strong { color: var(--text); }
+
+  /* HIGHLIGHT BLOCKS */
+  .highlight-block {
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    font-size: 14px;
+  }
+  .hb-blue  { background: rgba(121,192,255,0.06); border-left: 3px solid var(--accent2); }
+  .hb-orange{ background: rgba(247,129,102,0.06); border-left: 3px solid var(--accent); }
+  .hb-green { background: rgba(86,211,100,0.06); border-left: 3px solid var(--accent3); }
+  .hb-purple{ background: rgba(210,168,255,0.06); border-left: 3px solid var(--accent4); }
+  .hb-yellow{ background: rgba(255,166,87,0.06); border-left: 3px solid var(--accent5); }
+
+  /* VISUAL BOX */
+  .visual-box {
+    background: var(--surface2);
+    border: 1px dashed var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    margin: 16px 0;
+  }
+  .visual-box .v-icon { font-size: 2.5rem; margin-bottom: 10px; }
+  .visual-box p { color: var(--muted); font-size: 13px; margin-top: 6px; }
+  .visual-box strong { color: var(--accent2); display: block; margin-bottom: 6px; }
+
+  /* INLINE DIAGRAM */
+  .diagram {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--accent3);
+    overflow-x: auto;
+    margin: 14px 0;
+    line-height: 1.8;
+  }
+  .diagram .dim { color: var(--muted); }
+  .diagram .hi { color: var(--accent); }
+  .diagram .hi2 { color: var(--accent2); }
+  .diagram .hi3 { color: var(--accent4); }
+
+  /* CODE BLOCK */
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    overflow-x: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    margin: 14px 0;
+  }
+  .code-comment { color: #6e7681; }
+  .code-keyword { color: #ff7b72; }
+  .code-string  { color: #a5d6ff; }
+  .code-func    { color: #d2a8ff; }
+  .code-num     { color: #79c0ff; }
+  .code-output  { color: var(--accent3); }
+
+  /* QUIZ */
+  .quiz-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+    margin-bottom: 12px;
+  }
+  .quiz-item .q { font-weight: 600; margin-bottom: 12px; color: var(--text); }
+  .quiz-item .opts { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-item .opt {
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--muted);
+    transition: all 0.2s;
+    background: var(--surface2);
+  }
+  .quiz-item .opt:hover { border-color: var(--accent2); color: var(--text); }
+  .quiz-item .opt.correct { border-color: var(--accent3); background: rgba(86,211,100,0.1); color: var(--accent3); }
+  .quiz-item .opt.wrong   { border-color: var(--accent); background: rgba(247,129,102,0.1); color: var(--accent); }
+  .quiz-feedback { margin-top: 10px; font-size: 13px; display: none; padding: 8px 12px; border-radius: 6px; }
+
+  /* TERM CARDS */
+  .terms-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap: 12px; }
+  .term-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .term-card .term { font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+  .term-card .sym { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--accent4); background: rgba(210,168,255,0.1); padding: 1px 6px; border-radius: 4px; display: inline-block; margin-bottom: 8px; }
+  .term-card p { font-size: 13px; color: var(--muted); }
+
+  /* TECHNIQUE CARDS */
+  .tech-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px,1fr)); gap: 12px; margin: 14px 0; }
+  .tech-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 14px;
+    text-align: center;
+    transition: all 0.2s;
+    cursor: default;
+  }
+  .tech-card:hover { border-color: var(--accent2); transform: translateY(-2px); }
+  .tech-card .icon { font-size: 1.8rem; margin-bottom: 8px; }
+  .tech-card .name { font-weight: 700; font-size: 13px; margin-bottom: 4px; color: var(--text); }
+  .tech-card .desc { font-size: 12px; color: var(--muted); }
+  .tech-card .badge { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 10px; margin-top: 6px; }
+  .badge-basic   { background: rgba(86,211,100,0.15); color: var(--accent3); }
+  .badge-medium  { background: rgba(255,166,87,0.15); color: var(--accent5); }
+  .badge-advance { background: rgba(247,129,102,0.15); color: var(--accent); }
+
+  /* THINK BLOCK */
+  .think-block {
+    background: linear-gradient(135deg, rgba(210,168,255,0.05), rgba(121,192,255,0.05));
+    border: 1px solid rgba(210,168,255,0.2);
+    border-radius: 10px;
+    padding: 18px;
+    margin: 12px 0;
+  }
+  .think-block .q { font-size: 14px; color: var(--accent4); font-weight: 600; }
+
+  /* PRACTICE BOX */
+  .practice-box {
+    background: rgba(255,166,87,0.05);
+    border: 1px solid rgba(255,166,87,0.2);
+    border-radius: 10px;
+    padding: 18px;
+    margin: 10px 0;
+  }
+  .practice-box h4 { color: var(--accent5); margin-bottom: 10px; font-size: 13px; font-weight: 700; letter-spacing: 0.5px; }
+
+  /* MISTAKE BOX */
+  .mistake-box {
+    background: rgba(247,129,102,0.05);
+    border: 1px solid rgba(247,129,102,0.2);
+    border-radius: 10px;
+    padding: 18px;
+    margin: 10px 0;
+  }
+  .mistake-box h4 { color: var(--accent); margin-bottom: 10px; font-size: 13px; font-weight: 700; }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 13px; }
+  th { background: var(--surface2); color: var(--accent2); padding: 10px 14px; text-align: left; font-size: 12px; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); }
+  td { padding: 10px 14px; border-bottom: 1px solid rgba(48,54,61,0.5); color: #c9d1d9; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--surface2); }
+
+  /* PROGRESS BAR */
+  .progress-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 32px; }
+  .progress-label { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+  .progress-bar { height: 6px; background: var(--surface2); border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent5)); border-radius: 3px; transition: width 0.5s; }
+
+  /* TEACH BACK */
+  .teachback {
+    background: var(--surface2);
+    border-radius: 10px;
+    padding: 16px;
+    margin: 10px 0;
+    font-style: italic;
+    font-family: 'Lora', serif;
+    color: #c9d1d9;
+    border-left: 3px solid var(--accent4);
+    font-size: 14px;
+  }
+
+  /* SCROLL TO TOP */
+  .scroll-top {
+    position: fixed; bottom: 24px; right: 24px;
+    width: 44px; height: 44px;
+    background: var(--accent);
+    color: white;
+    border: none; border-radius: 50%;
+    font-size: 18px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 14px rgba(247,129,102,0.4);
+    z-index: 100;
+    transition: all 0.2s;
+  }
+  .scroll-top:hover { transform: scale(1.1); }
+
+  /* DIVIDER */
+  hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .sidebar { display: none; }
+    main { padding: 24px 16px; }
+    header { padding: 40px 16px 32px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="course-tag">📚 NLP Series · Chapter 4</div>
+  <h1>Text Representation &<br/>Feature Extraction</h1>
+  <p class="subtitle">Learn how to convert text into numbers so Machine Learning algorithms can understand it</p>
+  <div class="meta-pills">
+    <div class="meta-pill">🎯 Level: <span>Beginner</span></div>
+    <div class="meta-pill">⏱️ Time: <span>~90 min</span></div>
+    <div class="meta-pill">📘 Prerequisites: <span>Basic ML Pipeline</span></div>
+    <div class="meta-pill">🌐 Language: <span>Simple English</span></div>
+  </div>
+</header>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <h3>📋 Chapters</h3>
+    <a href="#ch0"><span class="chapter-num">0</span>Overview</a>
+    <a href="#ch1"><span class="chapter-num">1</span>What is Feature Extraction?</a>
+    <a href="#ch2"><span class="chapter-num">2</span>Why Do We Need It?</a>
+    <a href="#ch3"><span class="chapter-num">3</span>Why is it Difficult?</a>
+    <a href="#ch4"><span class="chapter-num">4</span>Core Idea</a>
+    <a href="#ch5"><span class="chapter-num">5</span>Key Terms</a>
+    <a href="#ch6"><span class="chapter-num">6</span>All Techniques</a>
+    <a href="#ch7"><span class="chapter-num">7</span>Final Quiz</a>
+  </nav>
+
+  <!-- MAIN -->
+  <main>
+
+    <!-- PROGRESS -->
+    <div class="progress-wrap">
+      <div class="progress-label">📊 Your Progress — Chapter 4 of NLP Series</div>
+      <div class="progress-bar"><div class="progress-fill" style="width: 40%"></div></div>
+    </div>
+
+    <!-- ======= CHAPTER 0: OVERVIEW ======= -->
+    <section class="chapter" id="ch0">
+      <div class="chapter-header">
+        <div class="ch-badge blue">🗺️</div>
+        <div class="chapter-title-block">
+          <h2>Chapter Overview: What Will You Learn?</h2>
+          <div class="goal-pill">🎯 Goal: Understand what this lesson is about before you begin</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label sl-concept">📋 Plan of Attack</div>
+        <div class="card">
+          <p>This lesson has <strong>clear steps</strong>. Here is what we will learn in order:</p>
+          <ol style="margin-top:12px">
+            <li><strong>Introduction</strong> — What is feature extraction? Why do we need it?</li>
+            <li><strong>Key Terms</strong> — Corpus, Vocabulary, Document, Token</li>
+            <li><strong>Two Main Techniques</strong> — Bag of Words (BoW) + TF-IDF</li>
+            <li><strong>Other Techniques</strong> — One-Hot Encoding, N-grams, Custom Features</li>
+            <li><strong>Assignment</strong> — Practice what you learned</li>
+          </ol>
+        </div>
+        <div class="highlight-block hb-blue">
+          💡 <strong>Instructor's Note:</strong> After this lesson, do the assignment. It will lock in everything you learned — like revision + practice combined.
+        </div>
+      </div>
+    </section>
+
+    <!-- ======= CHAPTER 1: WHAT IS FEATURE EXTRACTION ======= -->
+    <section class="chapter" id="ch1">
+      <div class="chapter-header">
+        <div class="ch-badge orange">1</div>
+        <div class="chapter-title-block">
+          <h2>What is Feature Extraction from Text?</h2>
+          <div class="goal-pill">🎯 Goal: Understand what "feature extraction from text" means in simple words</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label sl-concept">💡 Concept</div>
+        <div class="card">
+          <p>Imagine you want a computer to decide whether a movie review is <strong>positive or negative</strong>.</p>
+          <br/>
+          <p>The review is in English. But the computer does not understand English.</p>
+          <br/>
+          <p><strong>The computer only understands numbers.</strong></p>
+          <br/>
+          <p>So we have to <em>convert the text into numbers</em>. This process is called:</p>
+          <br/>
+          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:4px;">
+            <span style="background:rgba(247,129,102,0.1);border:1px solid var(--accent);border-radius:6px;padding:5px 12px;font-size:13px;color:var(--accent);">Feature Extraction from Text</span>
+            <span style="background:rgba(121,192,255,0.1);border:1px solid var(--accent2);border-radius:6px;padding:5px 12px;font-size:13px;color:var(--accent2);">Text Representation</span>
+            <span style="background:rgba(210,168,255,0.1);border:1px solid var(--accent4);border-radius:6px;padding:5px 12px;font-size:13px;color:var(--accent4);">Text Vectorization</span>
+          </div>
+          <br/>
+          <p style="color:var(--muted);font-size:13px;">All three mean the same thing — converting text into numbers (vectors).</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label sl-intuition">🧠 Mental Model</div>
+        <div class="highlight-block hb-purple">
+          <strong>Think of it like this:</strong><br/><br/>
+          You want to teach a blind robot to understand books. But the robot can only feel numbers. So you convert every word into a number, so the robot can "read."<br/><br/>
+          This is exactly what feature extraction does — it gives the ML model a "numeric version" of your text.
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label sl-visual">🖼️ Visual</div>
+        <div class="diagram">
+<span class="dim">Input Text:</span>   <span class="hi">"The movie was great!"</span>
+         ↓
+<span class="dim">Feature Extraction (our job today)</span>
+         ↓
+<span class="hi2">Numbers:</span>  <span class="hi3">[0, 1, 0, 0, 1, 0, 1, 0, 0, 0, ...]</span>
+         ↓
+<span class="dim">ML Algorithm reads numbers → Predicts:</span>  <span class="hi">"Positive"</span> ✅
+        </div>
+        <div class="visual-box">
+          <div class="v-icon">🔄</div>
+          <strong>Text → Numbers → Prediction</strong>
+          <p>The ML model never sees the words directly. It only sees the numbers we create from those words.</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label sl-question">🧠 Think Questions</div>
+        <div class="think-block">
+          <div class="q">❓ If ML models only understand numbers, how do you think Google Translate works?</div>
+        </div>
+        <div class="think-block">
+          <div class="q">❓ Can two different sentences have the same numbers? What problems could that cause?</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label sl-check">✅ Quick Check</div>
+        <div class="quiz-item" id="q1">
+          <div class="q">What does "Feature Extraction from Text" mean?</div>
+          <div class="opts">
+            <div class="opt" onclick="checkQ('q1',this,false)">A. Writing features of a movie in English</div>
+            <div class="opt" onclick="checkQ('q1',this,true)">B. Converting text into numbers for ML models</div>
+            <div class="opt" onclick="checkQ('q1',this,false)">C. Searching for keywords in Google</div>
+            <div class="opt" onclick="checkQ('q1',this,false)">D. Deleting unnecessary words from text</div>
+          </div>
+          <div class="quiz-feedback" id="q1-fb"></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label sl-reallife">🌍 Real-Life Example</div>
+        <div class="highlight-block hb-green">
+          🛒 <strong>Example: Village Shopkeeper</strong><br/><br/>
+          A shopkeeper records sales as "good day," "bad day," "okay day." But the accountant can only work with numbers. So someone converts: "good" → 3, "okay" → 2, "bad" → 1. This conversion is feature extraction!
+        </div>
+      </div>
+    </section>
+
+    <!-- ======= CHAPTER 2: WHY DO WE NEED IT ======= -->
+    <section class="chapter" id="ch2">
+      <div class="chapter-header">
+        <div class="ch-badge green">2</div>
+        <div class="chapter-title-block">
+          <h2>Why Do We Need Feature Extraction?</h2>
+          <div class="goal-pill">🎯 Goal: Understand why good features are the most important part of ML</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label sl-concept">💡 Core Reason</div>
+        <div class="card">
+          <p>In any Machine Learning problem, you need to give the algorithm <strong>input features</strong> — the things that help it make a prediction.</p>
+          <br/>
+          <p>There is a very famous saying in ML:</p>
+          <div class="highlight-block hb-orange" style="margin-top:12px">
+            🗑️ <strong>"Garbage In, Garbage Out"</strong><br/>
+            <small style="color:var(--muted)">If your input features are bad → your output prediction will also be bad</small>
+          </div>
+          <p>So creating good features from text is very important. It directly decides how well your model works.</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label sl-intuition">🧠 Real Example from Instructor</div>
+        <div class="card">
+          <p>Let's say you are building a <strong>Sentiment Analysis system</strong> (positive/negative review detector).</p>
+          <br/>
+          <p>Here are some features you can <em>manually</em> create from text:</p>
+          <br/>
+          <table>
+            <tr><th>Feature</th><th>What it means</th></tr>
+            <tr><td>Number of Words</td><td>How many total words are in the review?</td></tr>
+            <tr><td>Number of Negative Words</td><td>Count of words like "bad", "worst", "hate"</td></tr>
+            <tr><td>Number of Positive Words</td><td>Count of words like "good", "great", "love"</td></tr>
+            <tr><td>Average Word Length</td><td>Average number of letters per word</td></tr>
+          </table>
+          <p style="color:var(--muted);font-size:13px;">All of these are numeric features you create FROM the text.</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label sl-intuition">🧠 Instructor's Key Insight</div>
+        <div class="highlight-block hb-purple">
+          <strong>A weak algorithm with great features</strong> will beat <strong>a great algorithm with weak features</strong>.<br/><br/>
+          This means: <em>spend more time on your features than on your algorithm choice.</em>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label sl-visual">🖼️ ML Pipeline — Where We Are</div>
+        <div class="diagram">
+<span class="dim">Step 1:</span>  <span class="hi2">Data Collection</span>          <span class="dim">(Get raw text data)</span>
+<span class="dim">Step 2:</span>  <span class="hi2">Text Preprocessing</span>       <span class="dim">(Clean the text — last lesson)</span>
+<span class="dim">Step 3:</span>  <span class="hi">Feature Extraction</span>  ← <span class="hi">WE ARE HERE TODAY</span>
+<span class="dim">Step 4:</span>  <span class="hi2">Apply ML Algorithm</span>       <span class="dim">(Train & Predict)</span>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label sl-question">🧠 Think Questions</div>
+        <div class="think-block">
+          <div class="q">❓ If you are detecting spam emails — what features would you create? List 3.</div>
+        </div>
+        <div class="think-block">
+          <div class="q">❓ Why can't we just feed raw text directly into a ML model?</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label sl-reallife">🌍 Real-Life Connection</div>
+        <div class="highlight-block hb-green">
+          🏥 <strong>Doctor Analogy:</strong> A doctor doesn't look at your full body at once. They check specific features — temperature, blood pressure, pulse. Each feature gives information. More accurate features → better diagnosis. Same with ML!
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label sl-check">✅ Quick Check</div>
+        <div class="quiz-item" id="q2">
+          <div class="q">What does "Garbage In, Garbage Out" mean in ML?</div>
+          <div class="opts">
+            <div class="opt" onclick="checkQ('q2',this,false)">A. Always delete garbage files from your PC</div>
+            <div class="opt" onclick="checkQ('q2',this,false)">B. Use garbage collection in Python</div>
+            <div class="opt" onclick="checkQ('q2',this,true)">C. If input features are bad, the output predictions will also be bad</div>
+            <div class="opt" onclick="checkQ('q2',this,false)">D. Garbage is a type of data</div>
+          </div>
+          <div class="quiz-feedback" id="q2-fb"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======= CHAPTER 3: WHY IS IT DIFFICULT ======= -->
+    <section class="chapter" id="ch3">
+      <div class="chapter-header">
+        <div class="ch-badge purple">3</div>
+        <div class="chapter-title-block">
+          <h2>Why is Converting Text to Numbers Difficult?</h2>
+          <div class="goal-pill">🎯 Goal: Understand why text is harder to convert than images or audio</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label sl-concept">💡 Comparison</div>
+        <div class="card">
+          <p>Let's compare three types of data and see how hard it is to convert each into numbers:</p>
+          <br/>
+          <table>
+            <tr><th>Data Type</th><th>Conversion Method</th><th>Difficulty</th></tr>
+            <tr><td>🖼️ Image</td><td>Each pixel is already a number (0–255)</td><td>🟢 Easy</td></tr>
+            <tr><td>🔊 Audio/Speech</td><td>Sound wave → amplitude values → array of numbers</td><td>🟡 Medium</td></tr>
+            <tr><td>📝 Text</td><td>??? Not straightforward</td><td>🔴 Hard</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label sl-intuition">🧠 Why is Text Hard?</div>
+        <div class="highlight-block hb-orange">
+          <strong>Image:</strong> A photo of digit "5" → just read the pixel values → done ✅<br/><br/>
+          <strong>Audio:</strong> "Hello" spoken → record the sound wave values → done ✅<br/><br/>
+          <strong>Text:</strong> "Hello, how are you?" → <em>hmm... what exactly becomes the number?</em> 🤔<br/>
+          There is no direct mapping. You have to <strong>think and design</strong> a way to represent meaning using numbers.
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label sl-visual">🖼️ Image Example (Instructor used this)</div>
+        <div class="diagram">
+<span class="dim">Handwritten digit "5" image:</span>
+
+<span class="hi2">┌────────────────────────────────┐</span>
+<span class="hi2">│</span>  <span class="hi">0  0  0 255 255 200  0  0  0</span>  <span class="hi2">│</span>   ← Pixel rows
+<span class="hi2">│</span>  <span class="hi">0  0 255 200  0  0  0  0  0</span>  <span class="hi2">│</span>
+<span class="hi2">│</span>  <span class="hi">0 200 255  0  0  0  0  0  0</span>  <span class="hi2">│</span>
+<span class="hi2">└────────────────────────────────┘</span>
+
+<span class="dim">→ Each pixel = 1 number → the whole image = a big array of numbers</span>
+<span class="hi3">→ Easy! Already in numeric form.</span>
+        </div>
+        <div class="diagram">
+<span class="dim">Now try this with text:</span>
+
+<span class="hi">"The movie was amazing, I loved it!"</span>
+
+<span class="dim">→ How do you turn "amazing" into a number?</span>
+<span class="dim">→ Does it become 7? Or 42? Or [0,0,1,0,0,0,1]?</span>
+<span class="hi">→ This is the challenge. No obvious rule exists.</span>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label sl-practice">✍️ Think Task</div>
+        <div class="practice-box">
+          <h4>🤔 Task: Try It Yourself</h4>
+          <p>You have this sentence: <strong>"I love this phone"</strong></p>
+          <p style="margin-top:10px">Without using any technique — just using your common sense — try to convert this sentence into a set of numbers. Write it on paper.</p>
+          <p style="margin-top:10px; color:var(--muted); font-size:13px;">After trying, think: will someone else come up with the same numbers for the same sentence?</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label sl-question">🧠 Think Question</div>
+        <div class="think-block">
+          <div class="q">❓ "I love this phone" and "I love this camera" are similar sentences. Should their number representations be similar or different? Why?</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label sl-check">✅ Quick Check</div>
+        <div class="quiz-item" id="q3">
+          <div class="q">Why is converting IMAGE to numbers easier than converting TEXT to numbers?</div>
+          <div class="opts">
+            <div class="opt" onclick="checkQ('q3',this,false)">A. Images are smaller in size</div>
+            <div class="opt" onclick="checkQ('q3',this,true)">B. Image pixels are already numbers (0–255), but text has no direct numeric form</div>
+            <div class="opt" onclick="checkQ('q3',this,false)">C. Text has too many grammar rules</div>
+            <div class="opt" onclick="checkQ('q3',this,false)">D. ML models don't support images</div>
+          </div>
+          <div class="quiz-feedback" id="q3-fb"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======= CHAPTER 4: CORE IDEA ======= -->
+    <section class="chapter" id="ch4">
+      <div class="chapter-header">
+        <div class="ch-badge yellow">4</div>
+        <div class="chapter-title-block">
+          <h2>The Core Idea: What Should the Numbers Represent?</h2>
+          <div class="goal-pill">🎯 Goal: Understand the ONE rule that guides all text-to-number conversion</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label sl-concept">💡 The Golden Rule</div>
+        <div class="card">
+          <p>When you convert text to numbers, your numbers must <strong>preserve the meaning (semantic meaning)</strong> of the text.</p>
+          <br/>
+          <div style="background:var(--surface2);border-radius:10px;padding:18px;margin-top:4px">
+            <p style="font-size:14px">🎯 <strong>Goal:</strong> The numbers should carry the "hidden meaning" of the text.</p>
+            <br/>
+            <p style="font-size:14px">✅ If two sentences have similar meaning → their numbers should be <strong>similar</strong></p>
+            <p style="font-size:14px">❌ If two sentences have different meaning → their numbers should be <strong>different</strong></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label sl-intuition">🧠 Mental Model — The Semantic Compass</div>
+        <div class="highlight-block hb-purple">
+          <strong>Think of it like GPS coordinates:</strong><br/><br/>
+          Two cities that are close to each other have similar coordinates.<br/>
+          Two cities that are far apart have very different coordinates.<br/><br/>
+          Similarly, two sentences that are <em>close in meaning</em> should have <em>close numbers (vectors)</em>.<br/>
+          This is the core goal of text representation.
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label sl-visual">🖼️ Visual — Good vs Bad Representation</div>
+        <div class="diagram">
+<span class="hi3">GOOD Representation:</span>
+
+  <span class="hi">"I love this phone"</span>       →  <span class="hi2">[0.9, 0.1, 0.8, 0.2]</span>
+  <span class="hi">"This phone is amazing"</span>  →  <span class="hi2">[0.85, 0.12, 0.78, 0.25]</span>
+  <span class="dim">(Similar meaning → Similar numbers)</span>  ✅
+
+<span class="hi">BAD Representation:</span>
+
+  <span class="hi">"I love this phone"</span>       →  <span class="hi2">[0.1, 0.9, 0.3, 0.7]</span>
+  <span class="hi">"This phone is amazing"</span>  →  <span class="hi2">[0.8, 0.0, 0.9, 0.1]</span>
+  <span class="dim">(Same meaning → Totally different numbers)</span>  ❌
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label sl-question">🧠 Think Questions</div>
+        <div class="think-block">
+          <div class="q">❓ "Cat" and "Kitten" mean almost the same thing. Should their numeric representations be close or far apart?</div>
+        </div>
+        <div class="think-block">
+          <div class="q">❓ "Hot" and "Cold" mean opposite things. Should their representations be very similar or very different?</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label sl-question">🗣️ Teach-Back Prompt</div>
+        <div class="teachback">
+          "Explain to a friend: Why can't we just randomly assign numbers to words? What problem would that cause?"
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label sl-reallife">🌍 Real-Life Example</div>
+        <div class="highlight-block hb-green">
+          🌡️ <strong>Thermometer Analogy:</strong> A thermometer converts "hotness" into numbers. 37°C means one thing, 40°C means another. The numbers <em>preserve the meaning</em> — you can tell which is hotter just by looking at numbers. Good text representation should work the same way.
+        </div>
+      </div>
+    </section>
+
+    <!-- ======= CHAPTER 5: KEY TERMS ======= -->
+    <section class="chapter" id="ch5">
+      <div class="chapter-header">
+        <div class="ch-badge pink">5</div>
+        <div class="chapter-title-block">
+          <h2>Key Terms You Must Know</h2>
+          <div class="goal-pill">🎯 Goal: Learn 4 important words used throughout NLP — they will appear everywhere</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label sl-concept">💡 Dataset Used: IMDB Movie Reviews</div>
+        <div class="card">
+          <p>The instructor uses the <strong>IMDB Movie Reviews dataset</strong> to explain these terms.</p>
+          <br/>
+          <p>It has <strong>50,000 movie reviews</strong>. Each row has:</p>
+          <ul style="margin-top:8px">
+            <li>The review text (e.g., <em>"This movie was amazing!"</em>)</li>
+            <li>The sentiment (positive or negative)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label sl-visual">🖼️ All 4 Terms Explained</div>
+        <div class="terms-grid">
+          <div class="term-card">
+            <div class="term">📚 Corpus</div>
+            <div class="sym">C</div>
+            <p>The <strong>entire collection</strong> of all text data. All 50,000 reviews put together = the Corpus. All words, all sentences, everything — including repeated words.</p>
+          </div>
+          <div class="term-card">
+            <div class="term">📖 Vocabulary</div>
+            <div class="sym">V / vocab</div>
+            <p>The set of <strong>all unique words</strong> in the Corpus. If "good" appears 500 times, it is counted only ONCE in the Vocabulary. Typically much smaller than Corpus.</p>
+          </div>
+          <div class="term-card">
+            <div class="term">📄 Document</div>
+            <div class="sym">D</div>
+            <p>Each <strong>individual review</strong> is one Document. If there are 50,000 reviews, there are 50,000 Documents.</p>
+          </div>
+          <div class="term-card">
+            <div class="term">🔤 Word / Token</div>
+            <div class="sym">W / T</div>
+            <p>Each <strong>individual word</strong> inside a Document. In "I love movies" — there are 3 tokens: "I", "love", "movies".</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label sl-visual">🖼️ Visual — Seeing All Terms Together</div>
+        <div class="diagram">
+<span class="hi3">CORPUS</span> = Everything combined
+<span class="dim">──────────────────────────────────────────────</span>
+ <span class="hi2">Document 1:</span>  <span class="hi">"The movie was great, I loved it"</span>
+ <span class="hi2">Document 2:</span>  <span class="hi">"Terrible film, worst experience ever"</span>
+ <span class="hi2">Document 3:</span>  <span class="hi">"Great acting, loved the story"</span>
+ <span class="dim">...</span>  50,000 documents total
+<span class="dim">──────────────────────────────────────────────</span>
+
+<span class="hi3">VOCABULARY</span> = Unique words only
+<span class="hi">{the, movie, was, great, I, loved, it, terrible,</span>
+<span class="hi"> film, worst, experience, ever, acting, story, ...}</span>
+<span class="dim">  → Maybe 20,000–100,000 unique words from 50K reviews</span>
+
+<span class="hi3">TOKENS</span> from Document 1:
+<span class="hi2">"The"  "movie"  "was"  "great"  "I"  "loved"  "it"</span>
+<span class="dim">  → 7 tokens / words in this document</span>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label sl-practice">✍️ Practice Task</div>
+        <div class="practice-box">
+          <h4>📝 Mini Exercise</h4>
+          <p>Given these 3 reviews:</p>
+          <ol style="margin:10px 0; padding-left:20px">
+            <li>"I love tea"</li>
+            <li>"Tea is great"</li>
+            <li>"Love is great"</li>
+          </ol>
+          <p><strong>Find:</strong></p>
+          <ul style="padding-left:20px; margin-top:6px">
+            <li>How many Documents are there?</li>
+            <li>What is the Corpus?</li>
+            <li>What is the Vocabulary (unique words)?</li>
+            <li>What are the Tokens in Document 2?</li>
+          </ul>
+          <details style="margin-top:14px">
+            <summary style="cursor:pointer; color:var(--accent2); font-size:13px">👁️ See Answer</summary>
+            <div style="margin-top:10px; font-size:13px; color:#c9d1d9; padding-top:10px; border-top:1px solid var(--border)">
+              <strong>Documents:</strong> 3<br/>
+              <strong>Corpus:</strong> "I love tea Tea is great Love is great"<br/>
+              <strong>Vocabulary:</strong> {I, love, tea, is, great} → 5 unique words<br/>
+              <strong>Tokens in Doc 2:</strong> "Tea", "is", "great"
+            </div>
+          </details>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label sl-mistake">⚠️ Common Mistakes</div>
+        <div class="mistake-box">
+          <h4>❌ Mistakes Beginners Make</h4>
+          <ul style="padding-left:20px; color:#c9d1d9; font-size:14px">
+            <li><strong>Corpus ≠ Vocabulary.</strong> Corpus has ALL words (with repeats). Vocabulary has only UNIQUE words.</li>
+            <li>Thinking each sentence = corpus. No — the WHOLE dataset together = corpus.</li>
+            <li>Thinking vocabulary size = corpus size. Usually vocabulary is 10x–100x smaller.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label sl-check">✅ Quick Check</div>
+        <div class="quiz-item" id="q4">
+          <div class="q">If the word "good" appears 1000 times in your dataset, how many times does it appear in the Vocabulary?</div>
+          <div class="opts">
+            <div class="opt" onclick="checkQ('q4',this,false)">A. 1000 times</div>
+            <div class="opt" onclick="checkQ('q4',this,true)">B. Only 1 time (unique words)</div>
+            <div class="opt" onclick="checkQ('q4',this,false)">C. 500 times</div>
+            <div class="opt" onclick="checkQ('q4',this,false)">D. It depends on the dataset</div>
+          </div>
+          <div class="quiz-feedback" id="q4-fb"></div>
+        </div>
+        <div class="quiz-item" id="q5">
+          <div class="q">What do you call each individual text (each review, each sentence) in a dataset?</div>
+          <div class="opts">
+            <div class="opt" onclick="checkQ('q5',this,false)">A. Corpus</div>
+            <div class="opt" onclick="checkQ('q5',this,false)">B. Vocabulary</div>
+            <div class="opt" onclick="checkQ('q5',this,true)">C. Document</div>
+            <div class="opt" onclick="checkQ('q5',this,false)">D. Token</div>
+          </div>
+          <div class="quiz-feedback" id="q5-fb"></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label sl-question">🗣️ Teach-Back</div>
+        <div class="teachback">
+          "Explain to your friend: What is the difference between Corpus and Vocabulary? Use your own example."
+        </div>
+      </div>
+    </section>
+
+    <!-- ======= CHAPTER 6: ALL TECHNIQUES ======= -->
+    <section class="chapter" id="ch6">
+      <div class="chapter-header">
+        <div class="ch-badge blue">6</div>
+        <div class="chapter-title-block">
+          <h2>All Text Representation Techniques</h2>
+          <div class="goal-pill">🎯 Goal: Know what all the techniques are and which ones are most important</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label sl-concept">💡 Overview of All Techniques</div>
+        <div class="tech-grid">
+          <div class="tech-card">
+            <div class="icon">1️⃣</div>
+            <div class="name">One-Hot Encoding</div>
+            <div class="desc">Assign a 1 or 0 to each word. Very basic.</div>
+            <div class="badge badge-basic">Basic</div>
+          </div>
+          <div class="tech-card">
+            <div class="icon">🎒</div>
+            <div class="name">Bag of Words (BoW)</div>
+            <div class="desc">Count how many times each word appears.</div>
+            <div class="badge badge-basic">Basic</div>
+          </div>
+          <div class="tech-card">
+            <div class="icon">📊</div>
+            <div class="name">TF-IDF</div>
+            <div class="desc">Smarter word counting with importance score.</div>
+            <div class="badge badge-medium">Medium</div>
+          </div>
+          <div class="tech-card">
+            <div class="icon">🔗</div>
+            <div class="name">N-grams</div>
+            <div class="desc">Look at groups of 2–3 words together.</div>
+            <div class="badge badge-medium">Medium</div>
+          </div>
+          <div class="tech-card">
+            <div class="icon">🛠️</div>
+            <div class="name">Custom Features</div>
+            <div class="desc">You design your own features using domain knowledge.</div>
+            <div class="badge badge-medium">Medium</div>
+          </div>
+          <div class="tech-card">
+            <div class="icon">🧠</div>
+            <div class="name">Word Embeddings (Word2Vec)</div>
+            <div class="desc">Deep learning converts words to rich vectors. Next video.</div>
+            <div class="badge badge-advance">Advanced</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label sl-concept">💡 One-Hot Encoding — Quick Intro</div>
+        <div class="card">
+          <p>This is the <strong>simplest technique</strong>. Each word in your vocabulary gets a position.</p>
+          <br/>
+          <p>The word is represented as a vector of <strong>0s and one 1</strong>.</p>
+        </div>
+        <div class="diagram">
+<span class="dim">Vocabulary:</span>  <span class="hi2">{I, love, tea, hate, coffee}</span>  <span class="dim">→ 5 words</span>
+
+<span class="hi">"love"</span>    →  <span class="hi3">[0, 1, 0, 0, 0]</span>   <span class="dim">(1 at position of "love")</span>
+<span class="hi">"tea"</span>     →  <span class="hi3">[0, 0, 1, 0, 0]</span>   <span class="dim">(1 at position of "tea")</span>
+<span class="hi">"coffee"</span>  →  <span class="hi3">[0, 0, 0, 0, 1]</span>   <span class="dim">(1 at position of "coffee")</span>
+
+<span class="dim">Every word → its own vector of 0s and 1s</span>
+        </div>
+        <div class="mistake-box">
+          <h4>⚠️ Problem with One-Hot Encoding</h4>
+          <p style="font-size:14px;color:#c9d1d9">It does not capture any <strong>meaning or relationship</strong> between words.<br/>
+          "King" and "Queen" would have completely unrelated vectors, even though they are related concepts.</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label sl-concept">💡 Bag of Words — Quick Intro</div>
+        <div class="card">
+          <p>Count how many times <strong>each vocabulary word appears</strong> in a document.</p>
+          <p style="margin-top:8px;color:var(--muted);font-size:13px">The order of words doesn't matter (imagine throwing words in a bag — that's why it's called "Bag of Words").</p>
+        </div>
+        <div class="diagram">
+<span class="dim">Vocabulary:</span>  <span class="hi2">{I, love, tea, hate, coffee}</span>
+
+<span class="dim">Document 1:</span>  <span class="hi">"I love tea and I love coffee"</span>
+<span class="dim">Count:</span>        <span class="hi3">[2, 2, 1, 0, 1]</span>
+                  <span class="dim"> I  love tea hate coffee</span>
+
+<span class="dim">Document 2:</span>  <span class="hi">"I hate coffee"</span>
+<span class="dim">Count:</span>        <span class="hi3">[1, 0, 0, 1, 1]</span>
+                  <span class="dim"> I  love tea hate coffee</span>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label sl-concept">💡 Custom Features — Quick Intro</div>
+        <div class="card">
+          <p>Sometimes, your own knowledge of the problem helps you create better features.</p>
+          <br/>
+          <p>Examples of custom features you can make from text:</p>
+          <ul style="margin-top:8px; padding-left:20px">
+            <li>Total word count in the review</li>
+            <li>Number of exclamation marks (!)</li>
+            <li>Number of capital letters</li>
+            <li>Number of negative words (bad, terrible, worst)</li>
+            <li>Average word length</li>
+            <li>Number of question marks</li>
+          </ul>
+        </div>
+        <div class="highlight-block hb-blue">
+          💡 <strong>When to use custom features?</strong><br/>
+          Use them when you have domain knowledge. A doctor analyzing medical notes would know which words matter most. A lawyer analyzing legal documents would know which phrases are important.
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label sl-concept">💡 Word Embeddings — Preview (Next Video)</div>
+        <div class="card">
+          <p>This is the <strong>most powerful</strong> technique. It uses Deep Learning to convert words into rich, meaning-preserving vectors.</p>
+          <br/>
+          <p>Famous example: <strong>Word2Vec</strong></p>
+          <br/>
+          <div class="diagram" style="margin:0">
+<span class="hi">"King"</span>  - <span class="hi">"Man"</span>  + <span class="hi">"Woman"</span>  = <span class="hi3">"Queen"</span>  <span class="dim">(using math on vectors!)</span>
+          </div>
+          <p style="margin-top:12px; font-size:13px; color:var(--muted)">This will be covered in the next video. Today we focus on the basics.</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label sl-practice">✍️ Guided Practice</div>
+        <div class="practice-box">
+          <h4>📝 Task: Identify the Technique</h4>
+          <p>For each scenario, which technique would you use?</p>
+          <ol style="margin-top:10px; padding-left:20px; font-size:14px; color:#c9d1d9">
+            <li style="margin-bottom:10px">You want a simple, quick approach and don't care about word relationships → <strong>________</strong></li>
+            <li style="margin-bottom:10px">You have medical knowledge and want to use specific symptom words → <strong>________</strong></li>
+            <li style="margin-bottom:10px">You want the most sophisticated, meaning-aware approach → <strong>________</strong></li>
+          </ol>
+          <details style="margin-top:10px">
+            <summary style="cursor:pointer; color:var(--accent2); font-size:13px">👁️ See Answers</summary>
+            <div style="margin-top:10px; font-size:13px; color:#c9d1d9; border-top:1px solid var(--border); padding-top:10px">
+              1. Bag of Words or One-Hot Encoding<br/>
+              2. Custom Features<br/>
+              3. Word Embeddings (Word2Vec)
+            </div>
+          </details>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label sl-question">🧠 Think Questions</div>
+        <div class="think-block">
+          <div class="q">❓ In Bag of Words, word ORDER is lost. Do you think word order matters? Give an example where it matters.</div>
+        </div>
+        <div class="think-block">
+          <div class="q">❓ "Not good" and "good" would have similar Bag of Words representations. Is this a problem? Why?</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label sl-mistake">⚠️ Common Mistakes</div>
+        <div class="mistake-box">
+          <h4>❌ Top Beginner Mistakes</h4>
+          <ul style="padding-left:20px; color:#c9d1d9; font-size:14px; line-height:2">
+            <li>Thinking One-Hot Encoding captures word meaning — it does NOT</li>
+            <li>Using very rare words in vocabulary (makes the vector too large and sparse)</li>
+            <li>Forgetting to preprocess text (lowercase, remove punctuation) before feature extraction</li>
+            <li>Skipping stop words removal — words like "the", "is", "and" don't add meaning</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label sl-question">🗣️ Teach-Back</div>
+        <div class="teachback">
+          "Explain to your friend: What is Bag of Words? Use the example of a food menu."
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label sl-reallife">🌍 Real-Life Connection</div>
+        <div class="highlight-block hb-green">
+          📱 <strong>SMS Spam Detection:</strong> Your phone uses text features to decide if a message is spam. Features like: count of words like "FREE", "WIN", "CLICK" → high count = likely spam. This is a real-world use of feature extraction + ML!
+        </div>
+      </div>
+    </section>
+
+    <!-- ======= CHAPTER 7: FINAL QUIZ ======= -->
+    <section class="chapter" id="ch7">
+      <div class="chapter-header">
+        <div class="ch-badge orange">🎯</div>
+        <div class="chapter-title-block">
+          <h2>Final Quiz — Test Everything You Learned</h2>
+          <div class="goal-pill">🎯 Goal: Confirm your understanding of all concepts in this lesson</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="quiz-item" id="fq1">
+          <div class="q">Q1. What is the process of converting text into numbers called?</div>
+          <div class="opts">
+            <div class="opt" onclick="checkQ('fq1',this,false)">A. Text Deletion</div>
+            <div class="opt" onclick="checkQ('fq1',this,true)">B. Feature Extraction / Text Vectorization</div>
+            <div class="opt" onclick="checkQ('fq1',this,false)">C. Text Downloading</div>
+            <div class="opt" onclick="checkQ('fq1',this,false)">D. Data Normalization</div>
+          </div>
+          <div class="quiz-feedback" id="fq1-fb"></div>
+        </div>
+        <div class="quiz-item" id="fq2">
+          <div class="q">Q2. Which of these is the CORPUS in an IMDB review dataset?</div>
+          <div class="opts">
+            <div class="opt" onclick="checkQ('fq2',this,false)">A. One single review</div>
+            <div class="opt" onclick="checkQ('fq2',this,false)">B. List of unique words only</div>
+            <div class="opt" onclick="checkQ('fq2',this,true)">C. All 50,000 reviews combined</div>
+            <div class="opt" onclick="checkQ('fq2',this,false)">D. The ML model</div>
+          </div>
+          <div class="quiz-feedback" id="fq2-fb"></div>
+        </div>
+        <div class="quiz-item" id="fq3">
+          <div class="q">Q3. In One-Hot Encoding for vocabulary {cat, dog, bird, fish}, what is the vector for "dog"?</div>
+          <div class="opts">
+            <div class="opt" onclick="checkQ('fq3',this,false)">A. [1, 0, 0, 0]</div>
+            <div class="opt" onclick="checkQ('fq3',this,true)">B. [0, 1, 0, 0]</div>
+            <div class="opt" onclick="checkQ('fq3',this,false)">C. [0, 0, 1, 0]</div>
+            <div class="opt" onclick="checkQ('fq3',this,false)">D. [1, 1, 0, 0]</div>
+          </div>
+          <div class="quiz-feedback" id="fq3-fb"></div>
+        </div>
+        <div class="quiz-item" id="fq4">
+          <div class="q">Q4. What is the MAIN goal when converting text to numbers?</div>
+          <div class="opts">
+            <div class="opt" onclick="checkQ('fq4',this,false)">A. Make the file size smaller</div>
+            <div class="opt" onclick="checkQ('fq4',this,false)">B. Make the code run faster</div>
+            <div class="opt" onclick="checkQ('fq4',this,true)">C. Preserve the semantic meaning of the text in numeric form</div>
+            <div class="opt" onclick="checkQ('fq4',this,false)">D. Remove all grammar from the text</div>
+          </div>
+          <div class="quiz-feedback" id="fq4-fb"></div>
+        </div>
+        <div class="quiz-item" id="fq5">
+          <div class="q">Q5. Which technique counts word occurrences and ignores word order?</div>
+          <div class="opts">
+            <div class="opt" onclick="checkQ('fq5',this,false)">A. One-Hot Encoding</div>
+            <div class="opt" onclick="checkQ('fq5',this,true)">B. Bag of Words</div>
+            <div class="opt" onclick="checkQ('fq5',this,false)">C. Word Embeddings</div>
+            <div class="opt" onclick="checkQ('fq5',this,false)">D. TF-IDF</div>
+          </div>
+          <div class="quiz-feedback" id="fq5-fb"></div>
+        </div>
+      </div>
+
+      <div id="score-box" style="display:none; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:24px; text-align:center; margin-top:16px">
+        <div style="font-size:2rem; margin-bottom:8px" id="score-emoji">🎉</div>
+        <div style="font-size:1.5rem; font-weight:700; color:var(--accent3)" id="score-text">Score: 0/5</div>
+        <div style="color:var(--muted); margin-top:6px; font-size:13px" id="score-msg"></div>
+      </div>
+
+      <!-- ASSIGNMENT -->
+      <div style="margin-top:32px">
+        <div class="section-label sl-practice">📝 Assignment from Instructor</div>
+        <div class="card">
+          <p style="font-weight:700; font-size:15px; margin-bottom:14px">🎯 Assignment: Apply What You Learned</p>
+          <p>Take any 5 sentences of your choice (can be in Hindi or English).</p>
+          <ol style="padding-left:20px; margin-top:10px; color:#c9d1d9; line-height:2">
+            <li>Write the <strong>Corpus</strong> (combine all sentences)</li>
+            <li>Extract the <strong>Vocabulary</strong> (unique words only)</li>
+            <li>Identify each <strong>Document</strong></li>
+            <li>Apply <strong>One-Hot Encoding</strong> to 3 words from your vocabulary</li>
+            <li>Create a <strong>Bag of Words</strong> representation for 2 of your documents</li>
+            <li>Create 2 <strong>Custom Features</strong> you think are useful for your sentences</li>
+          </ol>
+          <div class="highlight-block hb-blue" style="margin-top:16px">
+            💡 The instructor says: <em>"If you attempt this assignment, all the concepts in this video will be revised automatically and locked in your memory."</em>
+          </div>
+        </div>
+      </div>
+
+      <!-- WHAT'S NEXT -->
+      <div style="margin-top:32px; background: linear-gradient(135deg, rgba(121,192,255,0.07), rgba(210,168,255,0.07)); border:1px solid var(--border); border-radius:14px; padding:24px; text-align:center;">
+        <div style="font-size:1.5rem; margin-bottom:10px">🚀</div>
+        <h3 style="margin-bottom:10px">Next Video: Word Embeddings & Word2Vec</h3>
+        <p style="color:var(--muted); font-size:14px; max-width:500px; margin:0 auto">The most powerful way to represent text — Deep Learning based approach that actually understands word meaning and relationships.</p>
+        <div style="margin-top:16px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap">
+          <span style="background:var(--surface); border:1px solid var(--border); border-radius:6px; padding:6px 14px; font-size:12px; color:var(--accent4)">Word2Vec</span>
+          <span style="background:var(--surface); border:1px solid var(--border); border-radius:6px; padding:6px 14px; font-size:12px; color:var(--accent4)">GloVe</span>
+          <span style="background:var(--surface); border:1px solid var(--border); border-radius:6px; padding:6px 14px; font-size:12px; color:var(--accent4)">Embedding Layers</span>
+          <span style="background:var(--surface); border:1px solid var(--border); border-radius:6px; padding:6px 14px; font-size:12px; color:var(--accent4)">Semantic Similarity</span>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- SCROLL TO TOP -->
+<button class="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+  const scores = {};
+  let totalAnswered = 0;
+  let totalCorrect = 0;
+  const QUIZ_QUESTIONS = ['fq1','fq2','fq3','fq4','fq5'];
+
+  function checkQ(id, el, isCorrect) {
+    if (scores[id] !== undefined) return; // already answered
+    scores[id] = isCorrect;
+    if (isCorrect) totalCorrect++;
+    totalAnswered++;
+
+    // Style the clicked option
+    el.classList.add(isCorrect ? 'correct' : 'wrong');
+
+    // If wrong, highlight correct one
+    if (!isCorrect) {
+      const opts = el.parentElement.querySelectorAll('.opt');
+      opts.forEach(o => {
+        if (o.getAttribute('onclick') && o.getAttribute('onclick').includes('true')) {
+          o.classList.add('correct');
+        }
+      });
+    }
+
+    // Show feedback
+    const fb = document.getElementById(id + '-fb');
+    if (fb) {
+      fb.style.display = 'block';
+      fb.style.background = isCorrect ? 'rgba(86,211,100,0.1)' : 'rgba(247,129,102,0.1)';
+      fb.style.color = isCorrect ? '#56d364' : '#f78166';
+      fb.textContent = isCorrect ? '✅ Correct! Great job.' : '❌ Not quite. Review the chapter and try again on paper.';
+    }
+
+    // Check if final quiz is done
+    const finalDone = QUIZ_QUESTIONS.every(q => scores[q] !== undefined);
+    if (finalDone) showFinalScore();
+  }
+
+  function showFinalScore() {
+    const box = document.getElementById('score-box');
+    const finalQ = QUIZ_QUESTIONS.filter(q => scores[q] !== undefined).length;
+    const finalC = QUIZ_QUESTIONS.filter(q => scores[q] === true).length;
+    box.style.display = 'block';
+    document.getElementById('score-text').textContent = `Score: ${finalC}/5`;
+    const emoji = document.getElementById('score-emoji');
+    const msg = document.getElementById('score-msg');
+    if (finalC === 5) {
+      emoji.textContent = '🏆'; msg.textContent = 'Perfect score! You have mastered this lesson. Ready for the next video!';
+    } else if (finalC >= 3) {
+      emoji.textContent = '👍'; msg.textContent = 'Good work! Review the chapters you got wrong and try the assignment.';
+    } else {
+      emoji.textContent = '📖'; msg.textContent = 'Keep going! Re-read the chapters carefully. Concepts take time — that is normal.';
+    }
+  }
+
+  // Sidebar active state on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.sidebar a');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        navLinks.forEach(l => l.classList.remove('active'));
+        const link = document.querySelector(`.sidebar a[href="#${e.target.id}"]`);
+        if (link) link.classList.add('active');
+      }
+    });
+  }, { threshold: 0.3 });
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
